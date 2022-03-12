@@ -5,7 +5,7 @@ import { colors } from "../utils/colors";
 import useNoteDB from "../utils/Database";
 import NoteTile from "./NoteTile";
 
-const NoteList = () => {
+const NoteList = ({ navigation }) => {
   const [notes, setNotes] = useState([]);
   const { getNotes } = useNoteDB();
   const { update } = useContext(MainContext);
@@ -13,14 +13,18 @@ const NoteList = () => {
   const getNotesFromDB = async () => {
     const notesArray = await getNotes();
     setNotes([...notesArray]);
-    console.log(notesArray);
   };
 
   useEffect(() => {
     getNotesFromDB();
   }, [update]);
 
-  const renderItem = ({ item }) => <NoteTile title={item.title} />;
+  const renderItem = ({ item }) => (
+    <NoteTile
+      title={item.title}
+      onPress={() => navigation.navigate("NewNote", { noteData: item })}
+    />
+  );
 
   return (
     <View flex={1}>

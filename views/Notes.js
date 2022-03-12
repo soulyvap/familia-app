@@ -1,4 +1,4 @@
-import { Button, Icon, VStack } from "native-base";
+import { Button, Icon, View, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import UtilButton from "../components/UtilButton";
@@ -9,16 +9,18 @@ import NoteList from "../components/NoteList";
 
 const Notes = ({ navigation }) => {
   return (
-    <VStack flex={1} bgColor={colors.notWhite}>
-      <BackButton onPress={() => navigation.goBack()} />
-      <UtilButton
-        bgColor={colors.green}
-        icon={<Icon color={"black"} as={<Entypo name="plus" />} />}
-        onPress={() => navigation.navigate("NewNote")}
-      />
-      <ViewHeading text={"My notes"} />
-      <NoteList />
-    </VStack>
+    <View flex={1} pt={3} bgColor={colors.notWhite}>
+      <VStack flex={1}>
+        <BackButton onPress={() => navigation.goBack()} />
+        <UtilButton
+          bgColor={colors.green}
+          icon={<Icon color={"black"} as={<Entypo name="plus" />} />}
+          onPress={() => navigation.navigate("NewNote")}
+        />
+        <ViewHeading text={"My notes"} />
+        <NoteList navigation={navigation} />
+      </VStack>
+    </View>
   );
 };
 

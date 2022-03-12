@@ -1,14 +1,16 @@
 import {
   Button,
   Input,
+  Modal,
   ScrollView,
   Select,
+  Text,
   TextArea,
   useToast,
   View,
   VStack,
 } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import UtilButton from "../components/UtilButton";
 import { colors } from "../utils/colors";
@@ -24,7 +26,15 @@ import {
 } from "react-native";
 import useNoteDB from "../utils/Database";
 
-const NewNote = ({ edit = false, navigation }) => {
+const NewNote = ({ route, navigation }) => {
+  const noteData = route.params
+    ? route.params.noteData
+      ? route.params.noteData
+      : undefined
+    : undefined;
+
+  const edit = noteData ? true : false;
+  const [modalVisible, setModalVisible] = useState(false);
   const [chapter, setChapter] = useState("");
   const [title, setTitle] = useState("");
   const [noteText, setNoteText] = useState("");
@@ -33,44 +43,57 @@ const NewNote = ({ edit = false, navigation }) => {
   const { addNote, deleteNote, editNote, getNotes } = useNoteDB();
 
   LogBox.ignoreLogs(["NativeBase:"]);
-
-  const showToast = (message) => {
-    toast.show({
-      title: "Invalid note",
-      description: message,
-      status: "warning",
-    });
-  };
-
   const pushNote = async () => {
     if (title.length === 0) {
-      showToast("Please enter at least a title");
+      toast.show({
+        title: "Invalid input",
+        description: "Please enter at least a title",
+        status: "warning",
+      });
     } else {
-      const noteData = {
+      let data = {
         title: title,
-        chapter: chapter.length > 0 ? chapter : "Other",
+        chapter: chapter.length !== "" ? chapter : "Other",
         content: noteText,
-        created: new Date(),
       };
-      console.log(noteData);
-      await addNote(noteData);
-      // const notes = await getNotes();
-      // console.log(notes);
+      if (!edit) {
+        await addNote({ ...data, created: new Date() });
+        toast.show({ description: "✅ Note added succesfully" });
+      } else {
+        console.log(noteData);
+        await editNote(noteData.id, { ...data, modified: new Date() });
+        toast.show({ description: "✅ Note edited succesfully" });
+      }
+      navigation.goBack();
     }
   };
+
+  const prefill = () => {
+    setChapter(noteData.chapter);
+    setTitle(noteData.title);
+    setNoteText(noteData.content);
+  };
+
+  useEffect(() => {
+    noteData && prefill();
+  }, []);
 
   const h = Dimensions.get("window").height;
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView>
-        <VStack h={h * 0.95}>
+      <ScrollView pt={3}>
+        <VStack h={h * 0.93}>
           <BackButton onPress={() => navigation.goBack()} />
           {edit && (
             <UtilButton
               bgColor={colors.green}
               icon={<Feather name={"trash-2"} size={20} />}
               right={8}
+              onPress={() => {
+                console.log("delete");
+                setModalVisible(true);
+              }}
             />
           )}
           <ViewHeading text={"Note"} />
@@ -118,14 +141,42 @@ const NewNote = ({ edit = false, navigation }) => {
             mx={constants.stdMargin + 4}
           />
           <View flex={1} />
-          <Button
-            mb={"10%"}
-            variant={"green"}
-            onPress={async () => await pushNote()}
-          >
+          <Button mb={"10%"} variant={"green"} onPress={pushNote}>
             Save
           </Button>
         </VStack>
+        <Modal isOpen={modalVisible} onClose={setModalVisible}>
+          <Modal.Content>
+            <Modal.Header>Delete this note?</Modal.Header>
+            <Modal.Body>
+              <Text>This change will be permanent.</Text>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Group space={2}>
+                <Button
+                  variant={"ghost"}
+                  _text={{ color: colors.notBlack }}
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  bgColor={colors.fuksi}
+                  borderRadius={8}
+                  onPress={async () => {
+                    setModalVisible(false);
+                    await deleteNote(noteData.id);
+                    navigation.goBack();
+                  }}
+                >
+                  Delete
+                </Button>
+              </Button.Group>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </ScrollView>
     </TouchableWithoutFeedback>
   );

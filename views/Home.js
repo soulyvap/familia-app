@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "native-base";
+import { Fab, Icon, View } from "native-base";
 import ChapterList from "../components/ChapterList";
 import Menu from "../components/Menu";
 import ViewHeading from "../components/ViewHeading";

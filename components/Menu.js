@@ -5,6 +5,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Image,
   Modal,
   View,
   VStack,
@@ -71,6 +72,9 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
             bgColor={colors.green}
             borderRadius={0}
             startIcon={icons[4]}
+            onPress={async () =>
+              await Linking.openURL("https://www.familiary.fi/membership.html")
+            }
           >
             Membership
           </Actionsheet.Item>
@@ -114,10 +118,10 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
                 />
                 <IconButton
                   icon={
-                    <Icon
-                      as={MaterialCommunityIcons}
-                      name="web"
-                      color={colors.notBlack}
+                    <Image
+                      source={require("../assets/familiaglobe_square.png")}
+                      alt="Familia globe"
+                      size={"8"}
                     />
                   }
                   onPress={async () =>

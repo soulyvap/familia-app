@@ -1,15 +1,18 @@
 import { FlatList, View } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import { chapters } from "../variables/chapters";
 import ChapterTile from "./ChapterTile";
 
 const ChapterList = ({ navigation }) => {
+  const [expandedItem, setExpandedItem] = useState();
   const renderItem = ({ item, index }) => (
     <ChapterTile
       navigation={navigation}
       image={item.image}
       text={item.title}
       index={index}
+      expanded={expandedItem === index}
+      setExpandedItem={setExpandedItem}
     />
   );
 

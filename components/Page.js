@@ -1,11 +1,21 @@
-import { Center, Image, Text, View, VStack } from "native-base";
-import React from "react";
+import { Button, Center, Image, Text, View, VStack } from "native-base";
+import React, { useEffect } from "react";
 import { Dimensions } from "react-native";
 import { colors } from "../utils/colors";
+import { sectionTypes } from "../variables/chapters";
+import Quiz from "./Quiz";
 
-const Page = () => {
+const Page = ({ section, scrollToIndex, index, setCurrentPage }) => {
+  const image = section.image;
+  const title = section.title;
+  const text = section.text;
+  const type = section.type;
+  const question = section.question;
+  const answers = section.answers;
+  const correct = section.correct;
   const h = Dimensions.get("window").height;
   const w = Dimensions.get("window").width;
+
   return (
     <View h={h} w={w} alignItems="center">
       <VStack
@@ -13,32 +23,46 @@ const Page = () => {
         w={"90%"}
         borderRadius={8}
         alignItems="center"
+        justifyContent={"center"}
         px={"8%"}
         bgColor={colors.notWhite}
         shadow={"6"}
         mt={"4%"}
       >
-        <Image
-          style={{ aspectRatio: 1, height: "30%", width: undefined }}
-          source={require("../assets/love.png")}
-          alt="illustration"
-        />
-        <Text color={colors.green} fontWeight="bold" mt={0}>
-          From falling in love to love
-        </Text>
-        <Center flex={1}>
-          <Text textAlign="justify">
-            Real life relationships are not necessarily as straightforward.
-            Romantic relationships have different stages, the first of which is
-            falling in love. Everything begins from two people seeing something
-            interesting in each other and finding, to their joy, that the
-            feeling is mutual. We see a lot of similarities to ourselves in the
-            person we love, and this resemblance that we experience brings a
-            couple who are in love closer. A couple who have just fallen in love
-            see each other in a strongly positive light and can see no faults in
-            each other, only an outright fulfilment of their dreams.
+        {type === sectionTypes.quiz && (
+          <VStack>
+            <View h={30} />
+            <Quiz
+              question={question}
+              answers={answers}
+              correctAns={correct}
+              next={() => {
+                scrollToIndex(index + 1);
+                setCurrentPage(index + 1);
+              }}
+            />
+          </VStack>
+        )}
+        {image && (
+          <Image
+            style={{ aspectRatio: 1, height: "50%", width: undefined }}
+            source={image}
+            alt="illustration"
+          />
+        )}
+        {title && (
+          <Text color={colors.green} fontSize={"xl"} fontWeight="bold" mt={0}>
+            {title}
           </Text>
-        </Center>
+        )}
+
+        {text && (
+          <Center flex={1}>
+            <Text lineHeight={25} fontSize={15} textAlign="justify">
+              {text}
+            </Text>
+          </Center>
+        )}
       </VStack>
     </View>
   );

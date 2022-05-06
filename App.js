@@ -1,15 +1,16 @@
 import React from "react";
-import { Box, extendTheme, NativeBaseProvider } from "native-base";
-import Home from "./views/Home";
-import { NavigationContainer } from "@react-navigation/native";
-import Navigator from "./navigator/Navigator";
-import Notes from "./views/Notes";
-import NewNote from "./views/NewNote";
+import { extendTheme, NativeBaseProvider } from "native-base";
 import { colors } from "./utils/colors";
 import { constants } from "./variables/constants";
 import { MainProvider } from "./contexts/MainContext";
+import { LogBox } from "react-native";
+import AppContainer from "./components/AppContainer";
+
+LogBox.ignoreLogs(["NativeBase: The contrast ratio"]);
 
 const App = () => {
+  // const [showPop, setShowPop] = useState(true);
+
   const theme = extendTheme({
     components: {
       Button: {
@@ -22,14 +23,28 @@ const App = () => {
           },
         },
       },
+      Text: {
+        variants: {
+          largeTitle: {
+            fontWeight: "bold",
+            fontSize: "2xl",
+          },
+        },
+      },
+      Input: {
+        variants: {
+          fuksi: {
+            px: 5,
+            _focus: { borderColor: colors.fuksi },
+          },
+        },
+      },
     },
   });
   return (
     <MainProvider>
       <NativeBaseProvider theme={theme}>
-        <Box flex={1} safeArea>
-          <Navigator />
-        </Box>
+        <AppContainer />
       </NativeBaseProvider>
     </MainProvider>
   );

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Fab, Icon, View } from "native-base";
-import ChapterList from "../components/ChapterList";
-import Menu from "../components/Menu";
-import ViewHeading from "../components/ViewHeading";
+import { View } from "native-base";
+import ChapterList from "../../components/ChapterList";
+import Menu from "../../components/Menu";
+import ViewHeading from "../../components/ViewHeading";
 
 const Home = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false);

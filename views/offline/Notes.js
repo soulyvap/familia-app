@@ -1,11 +1,11 @@
 import { Button, Icon, View, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
-import BackButton from "../components/BackButton";
-import UtilButton from "../components/UtilButton";
-import ViewHeading from "../components/ViewHeading";
+import BackButton from "../../components/BackButton";
+import UtilButton from "../../components/UtilButton";
+import ViewHeading from "../../components/ViewHeading";
 import { Entypo } from "@expo/vector-icons";
-import { colors } from "../utils/colors";
-import NoteList from "../components/NoteList";
+import { colors } from "../../utils/colors";
+import NoteList from "../../components/NoteList";
 
 const Notes = ({ navigation }) => {
   return (

@@ -2,19 +2,22 @@ import { FlatList, View } from "native-base";
 import React, { useRef } from "react";
 import { Animated } from "react-native";
 import { ScalingDot } from "react-native-animated-pagination-dots";
-import Page from "../components/Page";
-import { colors } from "../utils/colors";
+import { colors } from "../../utils/colors";
+import Page from "../../components/Page";
+import BackButton from "../../components/BackButton";
 
-const Chapter = () => {
-  const data = [{ key: "1" }, { key: "2" }, { key: "3" }];
+const Chapter = ({ route, navigation }) => {
+  const chapter = route.params.chapter;
+  console.log(chapter);
   const scrollX = useRef(new Animated.Value(0)).current;
   return (
-    <View flex={1} alignItems="center" mt={"8%"}>
+    <View flex={1} alignItems="center" pt={"8%"}>
+      <BackButton onPress={() => navigation.goBack()} />
       <FlatList
         h={"100%"}
-        data={data}
-        keyExtractor={(item) => item.key}
-        renderItem={(item) => <Page key={item.key} />}
+        data={chapter}
+        keyExtractor={(item, index) => item + index}
+        renderItem={(section) => <Page section={section} />}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -27,7 +30,7 @@ const Chapter = () => {
         )}
       />
       <ScalingDot
-        data={data}
+        data={chapter}
         scrollX={scrollX}
         activeDotColor={colors.fuksi}
         inActiveDotColor={"grey"}

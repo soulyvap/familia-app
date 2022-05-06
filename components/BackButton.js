@@ -1,4 +1,4 @@
-import { ArrowBackIcon, ChevronLeftIcon, IconButton } from "native-base";
+import { ChevronLeftIcon, IconButton } from "native-base";
 import React from "react";
 import { constants } from "../variables/constants";
 

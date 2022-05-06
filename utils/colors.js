@@ -3,4 +3,5 @@ export const colors = {
   fuksi: "#F27190",
   notWhite: "#F7F9FD",
   notBlack: "#404040",
+  grey: "#666666",
 };

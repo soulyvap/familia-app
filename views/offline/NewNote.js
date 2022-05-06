@@ -11,20 +11,20 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import BackButton from "../components/BackButton";
-import UtilButton from "../components/UtilButton";
-import { colors } from "../utils/colors";
+import BackButton from "../../components/BackButton";
+import UtilButton from "../../components/UtilButton";
+import { colors } from "../../utils/colors";
 import { Feather } from "@expo/vector-icons";
-import ViewHeading from "../components/ViewHeading";
-import { chapters } from "../variables/chapters";
-import { constants } from "../variables/constants";
+import ViewHeading from "../../components/ViewHeading";
+import { chapters } from "../../variables/chapters";
+import { constants } from "../../variables/constants";
 import {
   Dimensions,
   Keyboard,
   LogBox,
   TouchableWithoutFeedback,
 } from "react-native";
-import useNoteDB from "../utils/Database";
+import useNoteDB from "../../utils/Database";
 
 const NewNote = ({ route, navigation }) => {
   const noteData = route.params
@@ -32,8 +32,8 @@ const NewNote = ({ route, navigation }) => {
       ? route.params.noteData
       : undefined
     : undefined;
-
-  const edit = noteData ? true : false;
+  const fromChapter = route.params?.fromChapter ? true : false;
+  const edit = fromChapter ? false : noteData ? true : false;
   const [modalVisible, setModalVisible] = useState(false);
   const [chapter, setChapter] = useState("");
   const [title, setTitle] = useState("");
@@ -53,16 +53,22 @@ const NewNote = ({ route, navigation }) => {
     } else {
       let data = {
         title: title,
-        chapter: chapter.length !== "" ? chapter : "Other",
+        chapter: chapter !== "" ? chapter : "Other",
         content: noteText,
       };
       if (!edit) {
         await addNote({ ...data, created: new Date() });
-        toast.show({ description: "✅ Note added succesfully" });
+        toast.show({
+          description: "✅ Note added succesfully",
+          duration: 2000,
+        });
       } else {
         console.log(noteData);
         await editNote(noteData.id, { ...data, modified: new Date() });
-        toast.show({ description: "✅ Note edited succesfully" });
+        toast.show({
+          description: "✅ Note edited succesfully",
+          duration: 2000,
+        });
       }
       navigation.goBack();
     }

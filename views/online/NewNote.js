@@ -32,7 +32,8 @@ const NewNote = ({ route, navigation }) => {
       ? route.params.noteData
       : undefined
     : undefined;
-  const edit = noteData ? true : false;
+  const fromChapter = route.params?.fromChapter ? true : false;
+  const edit = fromChapter ? false : noteData ? true : false;
   const [modalVisible, setModalVisible] = useState(false);
   const [chapter, setChapter] = useState("");
   const [title, setTitle] = useState("");

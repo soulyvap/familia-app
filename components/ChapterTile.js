@@ -5,6 +5,7 @@ import {
   Image,
   PresenceTransition,
   Pressable,
+  Progress,
   Text,
   View,
   VStack,
@@ -12,7 +13,6 @@ import {
 import { colors } from "../utils/colors";
 import { constants } from "../variables/constants";
 import { Chapter1 } from "../variables/chapters";
-import { Animated } from "react-native-web";
 
 const ChapterTile = ({
   navigation,
@@ -28,12 +28,21 @@ const ChapterTile = ({
         bgColor={colors.notWhite}
         borderRadius={8}
         shadow="6"
-        p={2}
+        pb={2}
         mx={constants.stdMargin}
         mb={3}
         mt={2}
         space={1}
       >
+        <Progress
+          bg={"gray.100"}
+          _filledTrack={{
+            bg: colors.fuksi,
+          }}
+          value={Math.floor(Math.random() * 100)}
+          size="sm"
+          borderBottomRadius={"sm"}
+        />
         <HStack space={6} alignItems={"center"}>
           <Image
             source={image}

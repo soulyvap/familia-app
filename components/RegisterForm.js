@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { colors } from "../utils/colors";
 import { Feather } from "@expo/vector-icons";
 
-const RegisterForm = () => {
+const RegisterForm = ({ navigation }) => {
   const [showPass, setShowPass] = useState(false);
   return (
     <VStack alignItems={"center"} space={4} w={"100%"} flex={1}>
@@ -85,7 +85,12 @@ const RegisterForm = () => {
         pb={"8%"}
         w="100%"
       >
-        <Button variant={"green"} w={"80%"} py={3}>
+        <Button
+          variant={"green"}
+          w={"80%"}
+          py={3}
+          onPress={() => navigation.navigate("Polls")}
+        >
           Continue
         </Button>
       </VStack>

@@ -11,7 +11,7 @@ import { colors } from "../utils/colors";
 import { Feather } from "@expo/vector-icons";
 import QuestionText from "./QuestionText";
 
-const LoginForm = () => {
+const LoginForm = ({ navigation }) => {
   const [showPass, setShowPass] = useState(false);
   return (
     <VStack alignItems={"center"} space={4}>
@@ -55,7 +55,12 @@ const LoginForm = () => {
         btnText={"Click here"}
         onPress={() => {}}
       />
-      <Button variant={"green"} w={"80%"} py={3}>
+      <Button
+        variant={"green"}
+        w={"80%"}
+        py={3}
+        onPress={() => navigation.navigate("Polls")}
+      >
         Log in
       </Button>
     </VStack>

@@ -7,8 +7,11 @@ import Page from "../../components/Page";
 import BackButton from "../../components/BackButton";
 import UtilButton from "../../components/UtilButton";
 import { FontAwesome } from "@expo/vector-icons";
+import useProgress from "../../utils/hooks/useProgress";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Chapter = ({ route, navigation }) => {
+  const { saveChapterProgress } = useProgress();
   const flRef = useRef();
   const [currentPage, setCurrentPage] = useState(0);
   const scrollToIndex = (index) => {
@@ -16,6 +19,8 @@ const Chapter = ({ route, navigation }) => {
       flRef.current?.scrollToIndex({ animated: true, index: index });
   };
   const chapter = route.params.chapter;
+  const chapterIndex = route.params.chapterIndex;
+  const progress = route.params.progress;
   const scrollX = useRef(new Animated.Value(0)).current;
   const renderItem = ({ item, index }) => (
     <Page
@@ -26,9 +31,18 @@ const Chapter = ({ route, navigation }) => {
     />
   );
 
-  useEffect(() => {
-    console.log(currentPage);
-  }, [currentPage]);
+  const saveProgress = async () => {
+    if (currentPage > progress) {
+      saveChapterProgress(chapterIndex, currentPage);
+      console.log(currentPage, progress);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => saveProgress();
+    }, [currentPage])
+  );
 
   return (
     <View flex={1} alignItems="center" pt={"8%"}>
@@ -55,6 +69,7 @@ const Chapter = ({ route, navigation }) => {
       />
       <FlatList
         ref={flRef}
+        initialScrollIndex={progress}
         onMomentumScrollEnd={(e) => {
           const pageNumber = Math.floor(
             Math.floor(e.nativeEvent.contentOffset.x) /

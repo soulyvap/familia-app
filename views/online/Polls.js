@@ -1,37 +1,39 @@
-import { Animated, Dimensions, Text } from "react-native";
-import React, { useRef, useState } from "react";
+import { Animated, Dimensions } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PollList from "../../components/PollList";
-import { Button, FlatList, View, VStack } from "native-base";
+import { Button, FlatList, VStack } from "native-base";
 import ViewHeading from "../../components/ViewHeading";
-import BackButton from "../../components/BackButton";
-import { constants } from "../../variables/constants";
 import { ScalingDot } from "react-native-animated-pagination-dots";
 import { colors } from "../../utils/colors";
+import { useFirestore } from "../../utils/hooks/useFirestore";
+import { MainContext } from "../../contexts/MainContext";
+
+const pollData = [
+  {
+    question: "Are you in a romantic relationship?",
+    answers: [
+      "No",
+      "Yes, for 0-2 years",
+      "Yes, for 3-5 years",
+      "Yes, for 6-10 years",
+      "Yes, for 11+ years",
+    ],
+  },
+  {
+    question: "What do you want to improve about your relationship?",
+    answers: [
+      "Improve Communication",
+      "Parenting Together",
+      "Quality Time",
+      "Improve Intimacy",
+      "Reduce Tension",
+    ],
+  },
+];
 
 const Polls = ({ navigation }) => {
-  const pollData = [
-    {
-      question: "Are you in a romantic relationship?",
-      answers: [
-        "No",
-        "Yes, for 0-2 years",
-        "Yes, for 3-5 years",
-        "Yes, for 6-10 years",
-        "Yes, for 11+ years",
-      ],
-    },
-    {
-      question: "What do you want to improve about your relationship?",
-      answers: [
-        "Improve Communication",
-        "Parenting Together",
-        "Quality Time",
-        "Improve Intimacy",
-        "Reduce Tension",
-      ],
-    },
-  ];
-
+  const { currentUser } = useContext(MainContext);
+  const { addPollData } = useFirestore();
   const [index, setIndex] = useState(0);
 
   const [selectedAnswers, setSelectedAnswers] = useState(
@@ -42,7 +44,6 @@ const Polls = ({ navigation }) => {
     let copy = selectedAnswers;
     copy[index] = answer;
     setSelectedAnswers([...copy]);
-    console.log(selectedAnswers);
   };
 
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -55,6 +56,16 @@ const Polls = ({ navigation }) => {
   };
 
   const flRef = useRef();
+
+  const saveAnswers = async () => {
+    let answersData = {};
+    for ([i, answer] of selectedAnswers.entries()) {
+      answersData[pollData[i].question] = answer;
+    }
+
+    console.log(answersData);
+    await addPollData(currentUser, answersData);
+  };
 
   const renderItem = ({ index, item }) => (
     <VStack w={w} px={6} py={20} justifyContent={"space-between"}>
@@ -70,11 +81,12 @@ const Polls = ({ navigation }) => {
           if (index < pollData.length - 1) {
             scrollToIndex(index + 1);
           } else {
-            navigation.navigate("Home");
+            saveAnswers();
+            navigation.goBack();
           }
         }}
       >
-        Continue
+        {index == pollData.length - 1 ? "Done" : "Continue"}
       </Button>
     </VStack>
   );

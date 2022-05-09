@@ -13,6 +13,8 @@ import {
 import { colors } from "../utils/colors";
 import { constants } from "../variables/constants";
 import { Chapter1 } from "../variables/chapters";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ChapterTile = ({
   navigation,
@@ -22,6 +24,26 @@ const ChapterTile = ({
   expanded,
   setExpandedItem,
 }) => {
+  const [progress, setProgress] = useState(0);
+
+  const getProgress = async () => {
+    try {
+      const chapterProgress = await AsyncStorage.getItem(`chapter${index}`);
+      if (chapterProgress) {
+        setProgress(parseInt(chapterProgress));
+        console.log(chapterProgress);
+      }
+    } catch (error) {
+      console.error("getProgress", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getProgress();
+    }, [])
+  );
+
   return (
     <Pressable onPress={() => setExpandedItem(index)}>
       <VStack
@@ -39,7 +61,7 @@ const ChapterTile = ({
           _filledTrack={{
             bg: colors.fuksi,
           }}
-          value={Math.floor(Math.random() * 100)}
+          value={(progress / 6) * 100}
           size="sm"
           borderBottomRadius={"sm"}
         />
@@ -78,7 +100,11 @@ const ChapterTile = ({
                 w={"50%"}
                 mb={3}
                 onPress={() =>
-                  navigation.navigate("Chapter", { chapter: Chapter1 })
+                  navigation.navigate("Chapter", {
+                    chapter: Chapter1,
+                    chapterIndex: index,
+                    progress: progress,
+                  })
                 }
               >
                 Open chapter

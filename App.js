@@ -9,14 +9,17 @@ import AppContainer from "./components/AppContainer";
 LogBox.ignoreLogs(["NativeBase: The contrast ratio"]);
 
 const App = () => {
-  // const [showPop, setShowPop] = useState(true);
-
   const theme = extendTheme({
     components: {
       Button: {
         variants: {
           green: {
             bgColor: colors.green,
+            borderRadius: 8,
+            mx: constants.stdMargin + 3,
+            _text: { color: "white", fontWeight: "bold" },
+          },
+          basic: {
             borderRadius: 8,
             mx: constants.stdMargin + 3,
             _text: { color: "white", fontWeight: "bold" },

@@ -1,8 +1,21 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Center, HStack, Image, Text, VStack } from "native-base";
-import React from "react";
+import React, { useContext } from "react";
+import { MainContext } from "../../contexts/MainContext";
 import { colors } from "../../utils/colors";
 
 const Start = ({ navigation }) => {
+  const { setOffline } = useContext(MainContext);
+
+  const stayOffline = async () => {
+    try {
+      setOffline(true);
+      AsyncStorage.setItem("offline", "true");
+    } catch (error) {
+      console.error("stayOffline", error);
+    }
+  };
+
   return (
     <VStack flex={1} bgColor="white">
       <VStack h="65%" alignItems="center" justifyContent={"flex-end"} space={4}>
@@ -32,14 +45,23 @@ const Start = ({ navigation }) => {
           Sign In
         </Button>
         <Button
-          variant={"green"}
-          bgColor={colors.notWhite}
-          _text={{ color: colors.green }}
+          variant={"basic"}
+          bgColor={colors.fuksi}
           mx="10%"
           py={3}
           onPress={() => navigation.navigate("Register")}
         >
           Create New Account
+        </Button>
+        <Button
+          variant={"basic"}
+          bgColor={colors.notWhite}
+          _text={{ color: colors.green }}
+          mx="10%"
+          py={3}
+          onPress={() => stayOffline()}
+        >
+          Continue without an account
         </Button>
       </VStack>
     </VStack>

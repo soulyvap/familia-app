@@ -10,7 +10,7 @@ import {
   View,
   VStack,
 } from "native-base";
-import React from "react";
+import React, { useContext } from "react";
 import { colors } from "../utils/colors";
 import MenuTile from "./MenuTile";
 import {
@@ -19,11 +19,28 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { Linking } from "react-native";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MainContext } from "../contexts/MainContext";
 
 const Menu = ({ showMenu, setShowMenu, navigation }) => {
+  const { signOut } = useAuthentication();
+  const { setOffline, setCurrentUser } = useContext(MainContext);
+
   const navigateTo = (screenName) => {
     setShowMenu(false);
     navigation.navigate(screenName);
+  };
+
+  const handleLogout = async () => {
+    try {
+      setOffline(false);
+      await signOut();
+      await AsyncStorage.removeItem("offline");
+      setCurrentUser(undefined);
+    } catch (error) {
+      console.error("logout", error);
+    }
   };
 
   const icons = [
@@ -33,6 +50,7 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
     <Icon as={FontAwesome5} name={"globe-europe"} />,
     <Icon as={FontAwesome5} name={"handshake"} />,
     <Icon as={FontAwesome5} name={"cog"} />,
+    <Icon as={FontAwesome5} name={"sign-out-alt"} />,
   ];
 
   return (
@@ -80,6 +98,17 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
           </Actionsheet.Item>
           <Actionsheet.Item py={3} borderRadius={0} startIcon={icons[5]}>
             Profile settings
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            py={3}
+            bgColor={colors.fuksi}
+            borderRadius={0}
+            startIcon={icons[6]}
+            onPress={() => {
+              handleLogout();
+            }}
+          >
+            Log Out
           </Actionsheet.Item>
           <Actionsheet.Footer>
             <Center h={70} mb={5}>
@@ -133,55 +162,7 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
           </Actionsheet.Footer>
         </Actionsheet.Content>
       </Actionsheet>
-      {/* <Modal
-        onClose={() => setShowMenu(false)}
-        isOpen={showMenu}
-        animationPreset="slide"
-        closeOnOverlayClick
-      >
-        <Modal.Content style={{ marginBottom: 10, marginTop: "auto" }}>
-          <Modal.Body p={0}>
-            <VStack justifyContent="flex-end">
-              <View h={60} />
-              <MenuTile
-                iconName="info-circle"
-                text={"Contact us"}
-                bgColor={colors.green}
-              />
-              <MenuTile
-                iconName="sticky-note"
-                text={"Notes"}
-                onPress={() => navigateTo("Notes")}
-              />
-              <MenuTile
-                iconName="share-alt"
-                text={"Share"}
-                bgColor={colors.green}
-              />
-              <MenuTile iconName="globe-europe" text={"Language"} />
-              <MenuTile
-                iconName="handshake"
-                text={"Membership"}
-                bgColor={colors.green}
-              />
-              <MenuTile iconName="cog" text={"Profile settings"} />
-              <Center h={100}>
-                <HStack>
-                  <IconButton
-                    icon={<Icon as={FontAwesome5} name="facebook" />}
-                  />
-                  <IconButton
-                    icon={<Icon as={FontAwesome5} name="instagram" />}
-                  />
-                  <IconButton
-                    icon={<Icon as={FontAwesome5} name="twitter" />}
-                  />
-                </HStack>
-              </Center>
-            </VStack>
-          </Modal.Body>
-        </Modal.Content>
-      </Modal> */}
+
       {!showMenu && (
         <Fab
           size={"12"}

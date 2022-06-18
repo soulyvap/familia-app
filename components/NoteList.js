@@ -2,7 +2,7 @@ import { Center, FlatList, Text, View } from "native-base";
 import React, { useContext, useEffect, useState } from "react";
 import { MainContext } from "../contexts/MainContext";
 import { colors } from "../utils/colors";
-import useNoteDB from "../utils/Database";
+import useNoteDB from "../utils/hooks/useNoteDB";
 import NoteTile from "./NoteTile";
 
 const NoteList = ({ navigation }) => {

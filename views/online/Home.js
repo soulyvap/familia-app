@@ -7,7 +7,7 @@ import Firebase from "../../config/firebase";
 import { MainContext } from "../../contexts/MainContext";
 
 const Home = ({ navigation }) => {
-  const { currentUser, offline } = useContext(MainContext);
+  const { currentUser, offline, setLoading } = useContext(MainContext);
   const [showMenu, setShowMenu] = useState(false);
   const [pollAnswered, setPollAnswered] = useState(undefined);
 
@@ -33,6 +33,7 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
+    setLoading(false);
     if (!offline) {
       checkPoll();
     }

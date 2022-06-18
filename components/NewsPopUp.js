@@ -9,19 +9,16 @@ import {
 } from "native-base";
 import React, { useEffect } from "react";
 import { Dimensions } from "react-native";
+import { colors } from "../utils/colors";
 import { useFirestore } from "../utils/hooks/useFirestore";
 
 const NewsPopUp = ({ isOpen, setShowPop }) => {
   const { news } = useFirestore();
 
-  useEffect(() => {
-    console.log(news);
-  }, [news]);
-
   const renderItem = (item, index) => (
-    <VStack space={5} py={5} key={index}>
+    <VStack space={5} py={3} key={index}>
       <HStack justifyContent={"space-between"}>
-        <Text>{item.title}</Text>
+        <Text fontWeight={"bold"} color={colors.fuksi}>{item.title}</Text>
         <Text>{item.date}</Text>
       </HStack>
       <Text>{item.text}</Text>
@@ -30,7 +27,7 @@ const NewsPopUp = ({ isOpen, setShowPop }) => {
   );
 
   const ItemDivider = () => {
-    return <View h={0.2} w={"100%"} bgColor="black" />;
+    return <View h={0.3} w={"100%"} bgColor="black" />;
   };
 
   return (

@@ -6,6 +6,7 @@ const db = Firebase.firestore();
 
 export const useFirestore = () => {
   const [news, setNews] = useState([]);
+  const {setLoading} = useContext(MainContext);
 
   useEffect(() => {
     getNews();
@@ -15,7 +16,7 @@ export const useFirestore = () => {
     try {
       const fetchedNews = await db
         .collection("news")
-        .orderBy("date", "desc")
+        .orderBy("timestamp", "desc")
         .get();
 
       let newsData = [];

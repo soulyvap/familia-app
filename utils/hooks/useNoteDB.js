@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
-import { MainContext } from "../contexts/MainContext";
+import { MainContext } from "../../contexts/MainContext";
 
 const noteDBKey = "Notes";
 

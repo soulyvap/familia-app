@@ -6,7 +6,7 @@ import { useFirestore } from "./useFirestore";
 const auth = Firebase.auth();
 
 export const useAuthentication = () => {
-  const { setCurrentUser } = useContext(MainContext);
+  const { setCurrentUser, setLoading } = useContext(MainContext);
   const { createUser } = useFirestore();
 
   const signOut = async () => {
@@ -18,6 +18,7 @@ export const useAuthentication = () => {
   };
 
   const register = async (email, password, username, phone) => {
+    setLoading(true);
     try {
       await auth.createUserWithEmailAndPassword(email, password);
       const currentUser = auth.currentUser;
@@ -29,6 +30,7 @@ export const useAuthentication = () => {
   };
 
   const login = async (email, password) => {
+    setLoading(true);
     try {
       await auth.signInWithEmailAndPassword(email, password);
       const currentUser = auth.currentUser;

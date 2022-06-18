@@ -25,7 +25,7 @@ import { MainContext } from "../contexts/MainContext";
 
 const Menu = ({ showMenu, setShowMenu, navigation }) => {
   const { signOut } = useAuthentication();
-  const { setOffline, setCurrentUser } = useContext(MainContext);
+  const { setOffline, setCurrentUser, setShowNews } = useContext(MainContext);
 
   const navigateTo = (screenName) => {
     setShowMenu(false);
@@ -46,7 +46,7 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
   const icons = [
     <Icon as={FontAwesome5} name={"info-circle"} />,
     <Icon as={FontAwesome5} name={"sticky-note"} />,
-    <Icon as={FontAwesome5} name={"share-alt"} />,
+    <Icon as={FontAwesome5} name={"newspaper"} />,
     <Icon as={FontAwesome5} name={"globe-europe"} />,
     <Icon as={FontAwesome5} name={"handshake"} />,
     <Icon as={FontAwesome5} name={"cog"} />,
@@ -79,8 +79,9 @@ const Menu = ({ showMenu, setShowMenu, navigation }) => {
             bgColor={colors.green}
             borderRadius={0}
             startIcon={icons[2]}
+            onPress={() => setShowNews(true)}
           >
-            Share
+            News
           </Actionsheet.Item>
           <Actionsheet.Item py={3} borderRadius={0} startIcon={icons[3]}>
             Language

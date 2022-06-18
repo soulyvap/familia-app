@@ -18,7 +18,13 @@ const useProgress = () => {
     setProgressions(chapProg);
   };
 
-  return { saveChapterProgress, progressions, getProgressions };
+  const resetProgressions = async () => {
+    for ([i, v] of chapters.tileInfo.entries) {
+      await AsyncStorage.removeItem(`chapter${i}`);
+    }
+  };
+
+  return { saveChapterProgress, progressions, getProgressions, resetProgressions };
 };
 
 export default useProgress;

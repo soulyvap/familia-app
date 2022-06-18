@@ -24,7 +24,7 @@ import {
   LogBox,
   TouchableWithoutFeedback,
 } from "react-native";
-import useNoteDB from "../../utils/Database";
+import useNoteDB from "../../utils/hooks/useNoteDB";
 
 const NewNote = ({ route, navigation }) => {
   const noteData = route.params

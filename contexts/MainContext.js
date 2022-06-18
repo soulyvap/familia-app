@@ -5,7 +5,8 @@ import Firebase from "../config/firebase";
 const MainContext = React.createContext({});
 
 const MainProvider = (props) => {
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [showPop, setShowPop] = useState(false);
   const [showNews, setShowNews] = useState(true);
   const [offline, setOffline] = useState(true);
@@ -47,6 +48,8 @@ const MainProvider = (props) => {
       value={{
         update,
         setUpdate,
+        loading,
+        setLoading,
         showPop,
         setShowPop,
         offline,
